@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="80" height="25" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="test_tiles" tilewidth="32" tileheight="32">
+  <image source="../../../tileset.png" width="1152" height="720"/>
+  <tile id="0">
+   <properties>
+    <property name="colour" value="0"/>
+    <property name="symbol" value=""/>
+    <property name="walkable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="colour" value="7"/>
+    <property name="symbol" value="#"/>
+    <property name="walkable" value="0"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Tile Layer 1" width="80" height="25">
+  <data encoding="base64" compression="zlib">
+   eJzt1sEKgCAURUHt/z/afRC+h2Gms5hFcAk8hFRLKRXYzpXY9baRzW6y/SK+PtOK/SLb09rpN7ffzHf9xciZT7/7sv3u297zCTLfjn7xNvrpt1I//8/v9BvdAAAA8KwBeAUIEw==
+  </data>
+ </layer>
+</map>
