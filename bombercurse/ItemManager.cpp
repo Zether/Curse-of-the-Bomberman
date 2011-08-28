@@ -70,4 +70,15 @@ void ItemManager::vAddItem(Item * item)
 void ItemManager::vRemoveItem(Item * item)
 {
 	item->vUnloadContent();
+
+	for(unsigned int i=0;i<items.size();i++)
+	{
+		if(items[i] == item)
+		{			
+			items.erase(items.begin()+i);
+			delete item;
+			break;
+		}
+	}
+
 }
