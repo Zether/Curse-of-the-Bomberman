@@ -31,11 +31,14 @@ private:
 	double dFlameExpire;
 	double dSmokeExpire;
 	bool bActive;
+	bool bSmoke;
+	bool bFire;
+	int nDamage;
 
 public:
 	Bomb() { };
 
-	Bomb(int x, int y, int radius = 5, double bombExpire = 10.0, double flameExpire = 5.0, double smokeExpire = 0.3)
+	Bomb(int x, int y, int radius = 5, double bombExpire = 10.0, double flameExpire = 5.0, double smokeExpire = 0.3, int damage = 1)
 	{
 		nX = x;
 		nY = y;
@@ -46,6 +49,10 @@ public:
 
 		nCreateTime = (int)clock();
 		bActive = true;
+
+		nDamage = damage;
+		bSmoke = false;
+		bFire = false;
 	};
 
 	void vUpdate()
@@ -53,6 +60,57 @@ public:
 		if(!bActive)
 		{
 			pItemManager->vRemoveItem(this);
+		}
+		else
+		{
+			if(bFire && !bSmoke)
+			{
+				bool bXWallReached = false;
+				bool bYWallReached = false;
+
+				//Look for victims
+				for(int j = 0; j <= this->nRadius; j++)
+				{
+					if(!bXWallReached && pCollisionManager->bIsEmpty(this->nX - j, this->nY))
+					{
+						pCollisionManager->vDealDamage(this->nX -j, this->nY, nDamage);
+					}
+					else
+					{
+						bXWallReached = true;
+					}
+					if(!bYWallReached && pCollisionManager->bIsEmpty(this->nX, this->nY - j))
+					{
+						pCollisionManager->vDealDamage(this->nX, this->nY -j, nDamage);
+					}
+					else
+					{
+						bYWallReached = true;
+					}
+				}
+
+				bXWallReached = false;
+				bYWallReached = false;
+				for(int j = 0; j <= this->nRadius; j++)
+				{
+					if(!bXWallReached && pCollisionManager->bIsEmpty(this->nX + j, this->nY))
+					{
+						pCollisionManager->vDealDamage(this->nX + j, this->nY, nDamage);
+					}
+					else
+					{
+						bXWallReached = true;
+					}
+					if(!bYWallReached && pCollisionManager->bIsEmpty(this->nX, this->nY + j))
+					{
+						pCollisionManager->vDealDamage(this->nX, this->nY + j, nDamage);
+					}
+					else
+					{
+						bYWallReached = true;
+					}
+				}
+			}
 		}
 	};
 
@@ -62,8 +120,6 @@ public:
 		char* szFlameSmokeChar = "*";
 		bool bXWallReached = false;
 		bool bYWallReached = false;
-		bool bSmoke = false;
-		bool bFire = false;
 		
 		int nBombDuration = (clock() - this->nCreateTime) / CLOCKS_PER_SEC;
 		

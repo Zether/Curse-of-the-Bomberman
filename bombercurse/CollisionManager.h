@@ -29,7 +29,7 @@ public:
 			return false;
 		}
 
-		for(int i=0;i < pCreatureManager->creatures.size();i++)
+		for(unsigned int i=0;i < pCreatureManager->creatures.size();i++)
 		{
 			if((pCreatureManager->creatures[i]->nX == nX) && (pCreatureManager->creatures[i]->nY == nY))
 			{
@@ -38,6 +38,24 @@ public:
 		}
 
 		return false;
+	}
+
+	void vDealDamage(int nX, int nY, int nDam)
+	{
+		if(nX < 0 || nY < 0  || nDam == 0)
+		{
+			return;
+		}
+
+		for(unsigned int i=0;i < pCreatureManager->creatures.size();i++)
+		{
+			if((pCreatureManager->creatures[i]->nX == nX) && (pCreatureManager->creatures[i]->nY == nY))
+			{
+				pCreatureManager->creatures[i]->vReceiveDamage(nDam);
+			}
+
+			//Add crate destroy code
+		}
 	}
 };
 

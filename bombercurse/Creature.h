@@ -29,6 +29,8 @@ public:
 	virtual void vMove(int x, int y)=0;
 
 	virtual void vMoveTo(int x, int y)=0;
+	
+	virtual void vReceiveDamage(int n)=0;
 
 	int nX;
 	int nY;

@@ -13,10 +13,12 @@ This notice must be kept intact.
 #include "pdc34dllw\panel.h"
 #include "Creature.h"
 #include "CreatureTypes.h"
+#include "CollisionManager.h"
 
 extern ItemManager * pItemManager;
 extern ScreenManager* pScreenManager;
 extern CreatureManager* pCreatureManager;
+extern CollisionManager* pCollisionManager;
 
 extern GameStates eGameState;
 
@@ -66,14 +68,27 @@ public:
 
 	void vMove(int nXShift, int nYShift)
 	{
-		nX += nXShift;
-		nY += nYShift;
+		if(pCollisionManager->bIsEmpty(nX + nXShift, nY + nYShift) && !pCollisionManager->bIsCreature(nX + nXShift, nY + nYShift))
+		{
+			nX += nXShift;
+			nY += nYShift;
+		}
 	}
 
 	void vMoveTo(int nx, int ny)
 	{
-		nX = nx;
-		nY = ny;
+		if(pCollisionManager->bIsEmpty(nX, nY) && !pCollisionManager->bIsCreature(nX, nY))
+		{
+			nX = nx;
+			nY = ny;
+		}
+	}
+
+	void vReceiveDamage(int n)
+	{
+		//You are dead!
+		nX = 0;
+		nY = 0;
 	}
 };
 
