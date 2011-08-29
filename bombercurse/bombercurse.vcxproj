@@ -96,6 +96,7 @@
   <ItemGroup>
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="Character.h" />
+    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Creature.h" />
     <ClInclude Include="CreatureManager.h" />
     <ClInclude Include="CreatureTypes.h" />

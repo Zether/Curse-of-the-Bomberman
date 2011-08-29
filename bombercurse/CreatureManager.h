@@ -17,9 +17,9 @@ using namespace std;
 class CreatureManager
 {
 private:
-	bool fInitialized;
-	vector<Creature*> creatures;
+	bool fInitialized;	
 public:
+	vector<Creature*> creatures;
 	CreatureManager();
 	~CreatureManager();
 

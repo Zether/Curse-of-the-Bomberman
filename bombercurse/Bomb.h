@@ -15,8 +15,10 @@ This notice must be kept intact.
 #include "Item.h"
 
 #include "ItemManager.h"
+#include "CollisionManager.h"
 
 extern ItemManager * pItemManager;
+extern CollisionManager * pCollisionManager;
 
 class Bomb : public Item
 {
@@ -57,11 +59,11 @@ public:
 	void vDraw()
 	{
 		char* szBombChar = "o";
-		if(bActive)
-		{
-			if ((clock() / CLOCKS_PER_SEC)  % 2 == 0) szBombChar = "O";
-			mvprintw(this->nY, this->nX, szBombChar);
-		}
+		char* szFlameSmokeChar = "*";
+		bool bXWallReached = false;
+		bool bYWallReached = false;
+		bool bSmoke = false;
+		bool bFire = false;
 		
 		int nBombDuration = (clock() - this->nCreateTime) / CLOCKS_PER_SEC;
 		
@@ -71,20 +73,71 @@ public:
 		}
 		else if (nBombDuration > dBombExpire + dFlameExpire)
 		{
-			for (int j = 0; j <= 2 * this->nRadius; j++)
-			{
-				mvprintw(this->nY, this->nX - j + this->nRadius, ",");
-				mvprintw(this->nY - j + this->nRadius,this->nX, ",");
-			}
+			szFlameSmokeChar = ",";
+			bSmoke = true;
 		}
 		else if (nBombDuration > dBombExpire)
 		{
-			for (int j = 0; j <= 2 * this->nRadius; j++)
+			szFlameSmokeChar = "*";
+			bFire = true;
+		}
+
+		if(bActive)
+		{
+			if ((clock() / CLOCKS_PER_SEC)  % 2 == 0) szBombChar = "O";
+			mvprintw(this->nY, this->nX, szBombChar);
+
+			bXWallReached = false;
+			bYWallReached = false;
+			
+			if(bFire || bSmoke)
 			{
-				mvprintw(this->nY, this->nX - j + this->nRadius, "*");
-				mvprintw(this->nY - j + this->nRadius,this->nX, "*");
+			//Draw negative side of bomb
+				for(int j = 0; j <= this->nRadius; j++)
+				{
+					if(!bXWallReached && pCollisionManager->bIsEmpty(this->nX - j, this->nY))
+					{
+						mvprintw(this->nY, this->nX - j, szFlameSmokeChar);
+					}
+					else
+					{
+						bXWallReached = true;
+					}
+					if(!bYWallReached && pCollisionManager->bIsEmpty(this->nX, this->nY - j))
+					{
+						mvprintw(this->nY - j, this->nX, szFlameSmokeChar);
+					}
+					else
+					{
+						bYWallReached = true;
+					}
+				}
+
+				bXWallReached = false;
+				bYWallReached = false;
+				//Draw positive side of bomb
+				for(int j = 0; j <= this->nRadius; j++)
+				{
+					if(!bXWallReached && pCollisionManager->bIsEmpty(this->nX + j, this->nY))
+					{
+						mvprintw(this->nY, this->nX + j, szFlameSmokeChar);
+					}
+					else
+					{
+						bXWallReached = true;
+					}
+					if(!bYWallReached && pCollisionManager->bIsEmpty(this->nX, this->nY + j))
+					{
+						mvprintw(this->nY + j, this->nX, szFlameSmokeChar);
+					}
+					else
+					{
+						bYWallReached = true;
+					}
+				}
 			}
 		}
+
 	};
 	void vLoadContent() { };
 	void vUnloadContent() { };

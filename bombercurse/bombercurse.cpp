@@ -24,6 +24,7 @@ This notice must be kept intact.
 #include "Creature.h"
 #include "Character.h"
 #include "MapManager.h"
+#include "CollisionManager.h"
 
 using namespace std;
 
@@ -44,6 +45,7 @@ ItemManager* pItemManager = new ItemManager();
 CreatureManager* pCreatureManager = new CreatureManager();
 ScreenManager* pScreenManager = new ScreenManager();
 MapManager* pMapManager = new MapManager();
+CollisionManager* pCollisionManager = new CollisionManager();
 
 GameStates eGameState = PLAY_GAME;
 
