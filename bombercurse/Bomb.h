@@ -27,6 +27,8 @@ private:
 	int nY;
 	int nRadius;
 	int nCreateTime;
+	int nToggleTime;
+	int nLastUpdate;
 	double dBombExpire;
 	double dFlameExpire;
 	double dSmokeExpire;
@@ -34,6 +36,7 @@ private:
 	bool bSmoke;
 	bool bFire;
 	int nDamage;
+	bool bSymbolToggle;
 
 public:
 	Bomb() { };
@@ -48,11 +51,15 @@ public:
 		dSmokeExpire = smokeExpire;
 
 		nCreateTime = (int)clock();
+		nLastUpdate = nCreateTime;
+		nToggleTime = 0;
 		bActive = true;
 
 		nDamage = damage;
 		bSmoke = false;
 		bFire = false;
+
+		bSymbolToggle = false;
 	};
 
 	void vUpdate()
@@ -63,6 +70,15 @@ public:
 		}
 		else
 		{
+			nToggleTime += (int)clock() - nLastUpdate;
+			if(nToggleTime >= CLOCKS_PER_SEC)
+			{
+				nToggleTime -= CLOCKS_PER_SEC;
+				bSymbolToggle = !bSymbolToggle;
+			}
+
+			nLastUpdate = (int)clock();
+
 			if(bFire && !bSmoke)
 			{
 				bool bXWallReached = false;
@@ -140,7 +156,17 @@ public:
 
 		if(bActive)
 		{
-			if ((clock() / CLOCKS_PER_SEC)  % 2 == 0) szBombChar = "O";
+			//if ((clock() / CLOCKS_PER_SEC)  % 2 == 0) bSymbolToggle = !bSymbolToggle;
+
+			if(bSymbolToggle)
+			{
+				szBombChar = "O";
+			}
+			else
+			{
+				szBombChar = "o";
+			}
+
 			mvprintw(this->nY, this->nX, szBombChar);
 
 			bXWallReached = false;
