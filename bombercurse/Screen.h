@@ -9,33 +9,56 @@ This notice must be kept intact.
 #ifndef SCREEN_H
 #define SCREEN_H
 
-enum ScreenStatus
+#include "BitMacros.h"
+
+enum ScreenStatusBits
 {
-	Active,
-	Inactive
+	UPDATE_SCREEN = 0,
+	DRAW_SCREEN = 1,
+	REMOVE_SCREEN = 2,
+
 };
 
 class Screen
 {
 protected:
-	ScreenStatus eStatus;
+	int nStatus;
 public:
-	Screen() { };
+	Screen() { nStatus = 0; };
 	virtual void vUpdate()=0;
 	virtual void vDraw()=0;
 	virtual void vLoadContent()=0;
 	virtual void vUnloadContent()=0;
 
-	ScreenStatus eGetStatus()
+	int nGetStatus()
 	{
-		return eStatus;
+		return nStatus;
 	}
 
-	bool bIsActive()
+	int nIsActive()
 	{
-		return (eStatus == ScreenStatus::Active);
+		return (CHCKBIT(nStatus,DRAW_SCREEN));
 	}
 
+	void vSetStatus(int status)
+	{
+		nStatus = status;
+	}	
+
+	void vSetStatusBit(int bit)
+	{
+		SETBIT(nStatus, bit);
+	}
+
+	void vClearStatusBit(int bit)
+	{
+		CLRBIT(nStatus, bit);
+	}
+
+	int nGetStatusBit(int bit)
+	{
+		return CHCKBIT(nStatus, bit);
+	}
 };
 
 #endif

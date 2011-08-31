@@ -42,7 +42,10 @@ void ScreenManager::vUpdate()
 {
 	for(unsigned int i=0;i<screens.size();i++)
 	{
-		screens[i]->vUpdate();
+		if(screens[i]->nGetStatusBit(UPDATE_SCREEN) != 0)
+		{
+			screens[i]->vUpdate();
+		}
 	}
 }
 
@@ -50,7 +53,7 @@ void ScreenManager::vDraw()
 {
 	for(unsigned int i=0;i<screens.size();i++)
 	{
-		if(screens[i]->bIsActive() == true)
+		if(screens[i]->nGetStatusBit(DRAW_SCREEN) != 0)
 		{
 			screens[i]->vDraw();
 		}

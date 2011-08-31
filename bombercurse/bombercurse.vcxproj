@@ -94,6 +94,7 @@
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BitMacros.h" />
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="CollisionManager.h" />
@@ -102,6 +103,7 @@
     <ClInclude Include="CreatureTypes.h" />
     <ClInclude Include="GameplayScreen.h" />
     <ClInclude Include="GameStates.h" />
+    <ClInclude Include="IntroScreen.h" />
     <ClInclude Include="MapManager.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="ScreenManager.h" />

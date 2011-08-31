@@ -19,6 +19,7 @@ This notice must be kept intact.
 #include "ItemManager.h"
 #include "ScreenManager.h"
 #include "GameplayScreen.h"
+#include "IntroScreen.h"
 #include "GameStates.h"
 #include "CreatureManager.h"
 #include "Creature.h"
@@ -47,7 +48,7 @@ ScreenManager* pScreenManager = new ScreenManager();
 MapManager* pMapManager = new MapManager();
 CollisionManager* pCollisionManager = new CollisionManager();
 
-GameStates eGameState = PLAY_GAME;
+GameStates eGameState = INTRO_GAME;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -68,8 +69,13 @@ int _tmain(int argc, _TCHAR* argv[])
 	pMapManager->bLoadMap("Maps/Map1.tmx");
 
 	Tmx::Map * pMap = pMapManager->pGetMap();
+	
+	GameplayScreen* pGameScreen; 
+	IntroScreen* pIntroScreen;
 
-	pScreenManager->vAddScreen(new GameplayScreen());
+	pScreenManager->vAddScreen(pIntroScreen = new IntroScreen());
+	pScreenManager->vAddScreen(pGameScreen = new GameplayScreen());
+	pGameScreen->vSetStatus(0);
 
 	pItemManager->vAddItem(new Bomb(5,1));
 	pItemManager->vAddItem(new Bomb(5, 16));
@@ -84,7 +90,7 @@ int _tmain(int argc, _TCHAR* argv[])
 /*
 		for (int i = 0; i < pMap->GetNumTilesets(); ++i) {
 		printf("                                    \n");
-		printf("====================================\n");
+		printf"====================================\n");
 		printf("Tileset : %02d\n", i);
 		printf("====================================\n");
 
@@ -172,6 +178,13 @@ int _tmain(int argc, _TCHAR* argv[])
 	*/
 	while(1)
 	{
+		if(INTRO_GAME == eGameState && NULL != pIntroScreen && pIntroScreen->nGetStatusBit(REMOVE_SCREEN) !=0)
+		{
+			eGameState = PLAY_GAME;
+			pGameScreen->vSetStatusBit(UPDATE_SCREEN);
+			pGameScreen->vSetStatusBit(DRAW_SCREEN);
+		}
+
 		pScreenManager->vUpdate();
 		if ((clock() - m_dLastTick) / CLOCKS_PER_SEC > m_dTickInterval)
 		{
@@ -192,7 +205,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			}
 		}
 		*/
-		if(eGameState == EXIT_GAME)
+		if(EXIT_GAME == eGameState)
 		{
 			break;
 		}
@@ -201,6 +214,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	delete pItemManager;
 	delete pScreenManager;
 	delete pCreatureManager;
+	delete pMapManager;
+	delete pCollisionManager;
 
 	endwin();
 	return 0;

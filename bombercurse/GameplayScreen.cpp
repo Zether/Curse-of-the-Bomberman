@@ -23,7 +23,8 @@ extern MapManager* pMapManager;
 
 GameplayScreen::GameplayScreen()
 {
-	eStatus = Active;
+	SETBIT(nStatus, DRAW_SCREEN);
+	SETBIT(nStatus, UPDATE_SCREEN);
 }
 
 void GameplayScreen::vUpdate()
